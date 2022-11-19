@@ -15,7 +15,7 @@
 //		...
 //
 //		"github.com/goschtalt/goschtalt"
-//		_ "github.com/goschtalt/yaml-decoders"
+//		_ "github.com/goschtalt/yaml-decoder"
 //	)
 //
 // See the example for how to use this extension package.
