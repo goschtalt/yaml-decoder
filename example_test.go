@@ -5,32 +5,27 @@ package yaml_test
 
 import (
 	"fmt"
-	"io/fs"
 	"strings"
+	"testing/fstest"
 
 	"github.com/goschtalt/goschtalt"
 	_ "github.com/goschtalt/yaml-decoder"
-	"github.com/psanford/memfs"
 )
 
-const filename = `example.yml`
 const text = `---
 Example:
     Version: 1
     Colors: [red, green, blue]`
 
-func getFS() fs.FS {
-	mfs := memfs.New()
-	if err := mfs.WriteFile(filename, []byte(text), 0755); err != nil {
-		panic(err)
-	}
-
-	return mfs
-}
-
 func Example() {
+	fs := fstest.MapFS{
+		"example.yml": &fstest.MapFile{
+			Data: []byte(text),
+			Mode: 0644,
+		},
+	}
 	// Normally, you use something like os.DirFS("/etc/program")
-	g, err := goschtalt.New(goschtalt.AddDir(getFS(), "."))
+	g, err := goschtalt.New(goschtalt.AddDir(fs, "."))
 	if err != nil {
 		panic(err)
 	}
