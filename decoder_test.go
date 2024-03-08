@@ -211,6 +211,38 @@ h:
 				},
 			},
 		}, {
+			description: "An multi-line item",
+			in: `---
+a:
+  - item 1
+  - |
+    item 2
+    and more
+  - item 3
+`,
+			expected: meta.Object{
+				Origins: []meta.Origin{{File: "file.yml", Line: 1, Col: 1}},
+				Map: map[string]meta.Object{
+					"a": {
+						Origins: []meta.Origin{{File: "file.yml", Line: 2, Col: 1}},
+						Array: []meta.Object{
+							{
+								Origins: []meta.Origin{{File: "file.yml", Line: 3, Col: 5}},
+								Value:   "item 1",
+							},
+							{
+								Origins: []meta.Origin{{File: "file.yml", Line: 4, Col: 5}},
+								Value:   "item 2\nand more\n",
+							},
+							{
+								Origins: []meta.Origin{{File: "file.yml", Line: 7, Col: 5}},
+								Value:   "item 3",
+							},
+						},
+					},
+				},
+			},
+		}, {
 			description: "An invalid yaml file",
 			in:          `this is invalid=yaml`,
 			expectedErr: unknownErr,
